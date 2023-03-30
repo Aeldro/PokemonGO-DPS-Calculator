@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="data/style.css">
+    <link rel="icon" href="data/pokeball.png" />
+    <title>Pokémon GO DPS Calculator</title>
+</head>
+
+<body>
+    <div id="loading_container" class="invisible">
+        <img src="data/pokeball.png" alt="" id="spinning_pokeball">
+        <span id="loading_message">Chargement...</span>
+    </div>
+
+    <h1 class="center_text">Calculateur de DPS</h1>
+    <h2 class="center_text">pour Pokémon GO</h2>
+    <div id="bloc" class="center_text page_format">
+        <div id="inputs">
+            <div id="top_inputs" class="flex_row">
+                <div id="pokemon_selection_space" class="flex_column page_format">
+                    <label for="pokemon_selection">Sélectionnez votre Pokémon :</label>
+                    <select id="pokemon_selection">
+
+                    </select>
+                    <div id="pokemon_types_section" class="flex_row">
+                        <span>Acier</span>
+                        <span>Feu</span>
+                    </div>
+                </div>
+            </div>
+            <div id="intermediate_inputs">
+                <label for="shadow_selection"><img src="data/obscur.png" id="shadow_image"></label><label for="shadow_selection"><span id="shadow_text">Obscur</span></label>
+                <input type="checkbox" id="shadow_selection">
+            </div>
+            <div id="middle_inputs" class="flex_row">
+                <div id="level_selection_space" class="flex_column space_dimensions">
+                    <label for="level_selection">Niveau du Pokémon</label>
+                    <span class="comment_text">*Niveau 30 conseillé</span>
+                    <div class="flex_column">
+                        <input type="range" id="level_selection" min="1" max="50" value="30" step="0.5"
+                            oninput="document.getElementById('level').value=value">
+                        <input type="number" id="level" class="number_cells" min="1" max="50" value="30"
+                            oninput="document.getElementById('level_selection').value=value">
+                    </div>
+                </div>
+                <div id="attackiv_selection_space" class="flex_column space_dimensions">
+                    <label for="attackiv_selection">IV d'attaque du Pokémon</label>
+                    <div class="flex_column">
+                        <input type="range" id="attackiv_selection" min="0" max="15" value="15"
+                            oninput="document.getElementById('attackiv').value=value">
+                        <input type="number" id="attackiv" class="number_cells" value="15" min="0" max="15"
+                            oninput="document.getElementById('attackiv_selection').value=value">
+                    </div>
+                </div>
+
+            </div>
+            <div id="bottom_inputs" class="flex_row">
+                <div id="weather_selection_space" class="flex_column space_dimensions">
+                    <label for="weather_selection">Météo</label>
+                    <select id="weather_selection" class="other_selects">
+
+                    </select>
+                </div>
+                <div id="battletime_selection_space" class="flex_column space_dimensions">
+                    <label for="battletime_selection">Temps du combat</label>
+                    <div class="flex_column">
+                        <input type="range" id="battletime_selection" min="0" max="300" value="25"
+                            oninput="document.getElementById('battletime').value=value">
+                        <input type="number" id="battletime" class="number_cells" min="0" max="300" value="25"
+                            oninput="document.getElementById('battletime_selection').value=value">
+                    </div>
+                </div>
+            </div>
+            <div id="footer_inputs" class="flex_row">
+                <button id="calc_button">Calculer</button>
+            </div>
+        </div>
+        <hr>
+        <div id="results">
+            <div id="time_result_container">
+                <span id="time_result_title">Temps estimé avant de tomber KO : </span><span id="time_result">0s</span>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Attaque immédiate</th>
+                        <th>Attaque chargée</th>
+                        <th>DPS du cycle</th>
+                        <th>DPS en tombant KO</th>
+                        <th>TDO</th>
+                    </tr>
+                </thead>
+                <tbody id="results_table">
+                    <tr>
+
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <footer class="page_format">
+        <div id="comment_section" class="comment_text">
+            <p>DPS calculé selon les critères suivantes :
+            <ul>
+                <li>la cible possède une statistique de base de 200 en défense.</li>
+                <li>le niveau de la cible est égal au niveau du Pokémon attaquant.</li>
+                <li>l'IV "défense" de la cible est égal à l'IV "attaque" du Pokémon attaquant.</li>
+            </ul>
+            </p>
+        </div>
+        <div class="center_block">
+            <button id="classement_button">Classement</button>
+        </div>
+    </footer>
+</body>
+
+<script src="data/script.js"></script>
+<!-- <script type="module" src="data/elite_tag.js"></script> -->
+
+</html>

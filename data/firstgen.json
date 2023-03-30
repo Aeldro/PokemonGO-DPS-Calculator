@@ -1,0 +1,17 @@
+{
+
+    "": {
+        "id": "",
+        "english_name": "",
+        "french_name": "",
+        "types": [""],
+        "base_attack": "",
+        "base_defense": "",
+        "base_stamina": "",
+        "fast_moves": ["", ""],
+        "elite_fast_moves": [],
+        "charged_moves": ["", "", ""],
+        "elite_charged_moves": []
+    }
+    
+}
