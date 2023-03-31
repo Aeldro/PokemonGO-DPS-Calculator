@@ -26,12 +26,6 @@ const timeResult = document.getElementById('time_result');
 let fastMovesList = [];
 let chargedMovesList = [];
 
-let wishedLanguage = "fr";
-
-let numberOfTypes;
-let lastTypeId;
-let typesList = [];
-
 let pokemonsList = [];
 
 let weathersList = [];
@@ -98,16 +92,8 @@ async function initStart() {
     loadingMessage.textContent = "Chargement des attaques chargées...";
     await initChargedMovesList();
 
-    loadingMessage.textContent = "Chargement de la liste des types...";
-    await initTypesNumbers();
-    await initTypesList();
-
     loadingMessage.textContent = "Initialisation de la liste des Pokémons...";
     await initPokemonsList();
-    await addTypesToPokemonsList();
-    await addMovesToPokemonsList();
-    await addFrenchNamesToPokemonsList();
-    await addFrenchTypesToPokemonsList();
 
     loadingMessage.textContent = "Initialisation des météos...";
     await initWeathersList();
@@ -145,8 +131,8 @@ async function initPokemonsList() {
 
     /* Défini pokemonsList */
     await fetch("https://pogoapi.net/api/v1/pokemon_types.json").then(res => res.json()).then(Data => pokemonsList = Data).then(() => console.log(pokemonsList))
-    addStatsToPokemonsList()
-    addMovesToPokemonsList()
+    await addStatsToPokemonsList()
+    await addMovesToPokemonsList()
 }
 
 async function addStatsToPokemonsList() {
@@ -428,38 +414,6 @@ function pokemonDamageCalc() {
 
 }
 
-function eliteTag() {
-
-    for (let i = 0; i < currentPokemon.fast_moves.length; i++) {
-        for(let j = 0; j < currentPokemon.elite_fast_moves.length; j++) {
-            for(let k = 0; k < currentPokemon.fast_moves[i].name.length; k++) {
-                if(currentPokemon.fast_moves[i].name[k].name === currentPokemon.elite_fast_moves[j] && currentPokemon.fast_moves[i].name[k].language.name === "en") {
-                    for(let l = 0; l < currentPokemon.fast_moves[i].name.length; l++) {
-                        if(currentPokemon.fast_moves[i].name[l].language.name === wishedLanguage) {
-                            currentPokemon.fast_moves[i].name[l].name += " (élite)";
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    for (let i = 0; i < currentPokemon.charged_moves.length; i++) {
-        for(let j = 0; j < currentPokemon.elite_charged_moves.length; j++) {
-            for(let k = 0; k < currentPokemon.charged_moves[i].name.length; k++) {
-                if(currentPokemon.charged_moves[i].name[k].name === currentPokemon.elite_charged_moves[j] && currentPokemon.charged_moves[i].name[k].language.name === "en") {
-                    for(let l = 0; l < currentPokemon.charged_moves[i].name.length; l++) {
-                        if(currentPokemon.charged_moves[i].name[l].language.name === wishedLanguage) {
-                            currentPokemon.charged_moves[i].name[l].name += " (élite)";
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-}
-
 function setCombinationsTable() {
 
     currentCombinationsList = [];
@@ -506,18 +460,14 @@ function writeResults() {
             switch (j) {
                 case 0:
                     for (let k = 0; k < currentCombinationsList[i].fast_move.name.length; k++) {
-                        if (currentCombinationsList[i].fast_move.name[k].language.name === wishedLanguage) {
-                            newColumn.textContent = currentCombinationsList[i].fast_move.name[k].name;
-                            break;
-                        }
+                        newColumn.textContent = currentCombinationsList[i].fast_move.name[k].name;
+                        break;
                     }
                     break;
                 case 1:
                     for (let k = 0; k < currentCombinationsList[i].charged_move.name.length; k++) {
-                        if (currentCombinationsList[i].charged_move.name[k].language.name === wishedLanguage) {
-                            newColumn.textContent = currentCombinationsList[i].charged_move.name[k].name;
-                            break;
-                        }
+                        newColumn.textContent = currentCombinationsList[i].charged_move.name[k].name;
+                        break;
                     }
                     break;
                 case 2:
