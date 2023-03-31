@@ -22,9 +22,6 @@ const resultsTable = document.getElementById('results_table');
 const timeResult = document.getElementById('time_result');
 
 /* Construction de la base de données */
-let numberOfOriginalMoves;
-let lastOriginalMoveId;
-let originalMovesList = [];
 
 let fastMovesList = [];
 let chargedMovesList = [];
@@ -35,14 +32,11 @@ let numberOfTypes;
 let lastTypeId;
 let typesList = [];
 
-let numberOfOriginalPokemons;
-let originalPokemonsList = [];
-
-let cpMultipliersList = [];
-
 let pokemonsList = [];
 
 let weathersList = [];
+
+let cpMultipliersList = [];
 
 /* Calcul du DPS */
 let currentPokemon;
@@ -98,9 +92,6 @@ let numberOfFastMovesAfterTheLastCycle;
 async function initStart() {
 
     loadingScreen.classList.remove("invisible");
-    loadingMessage.textContent = "Chargement de la liste des attaques...";
-    await initOriginalMovesNumbers();
-    await initOriginalMovesList();
 
     loadingMessage.textContent = "Chargement des attaques immédiates...";
     await initFastMovesList();
@@ -110,10 +101,6 @@ async function initStart() {
     loadingMessage.textContent = "Chargement de la liste des types...";
     await initTypesNumbers();
     await initTypesList();
-
-    loadingMessage.textContent = "Chargement des Pokémons...";
-    await initOriginalPokemonsNumber();
-    await initOriginalPokemonsList();
 
     loadingMessage.textContent = "Initialisation de la liste des Pokémons...";
     await initPokemonsList();
@@ -135,395 +122,77 @@ async function initStart() {
 
 }
 
-async function initOriginalMovesNumbers() {
-
-    /* Définit numberOfOriginalMoves et lastOriginalMoveId */
-    await fetch("https://pokeapi.co/api/v2/move").then(res => res.json()).then(Data => {
-        numberOfOriginalMoves = Data.count;
-    })
-
-    await fetch("https://pokeapi.co/api/v2/move?offset=0&limit=10000").then(res => res.json()).then(Data => {
-        let urlLength = Data.results[numberOfOriginalMoves - 1].url.length;
-        lastOriginalMoveId = Data.results[numberOfOriginalMoves - 1].url.substring(31, urlLength - 1);
-    })
-
-}
-
-async function initOriginalMovesList() {
-
-    /* Définit originalMovesList */
-    for (let i = 1; i <= numberOfOriginalMoves; i++) {
-        try {
-            await fetch(`https://pokeapi.co/api/v2/move/${i}`).then(res => res.json()).then(Data => {
-                originalMovesList.push(Data.names);
-            })
-        } catch (err) {
-            numberOfOriginalMoves = lastOriginalMoveId;
-            i = 10000;
-        }
-    }
-
-    await initOriginalMovesNumbers();
-
-}
-
 async function initFastMovesList() {
 
     /* Défini fastMovesList */
-    await fetch("https://pogoapi.net/api/v1/fast_moves.json").then(res => res.json()).then(Data => {
-        for (let i = 0; i < Data.length; i++) {
-            fastMovesList.push(Data[i]);
-        }
-    })
-
-    /* Debug Mud-Slap */
-    for (let i = 0; i < fastMovesList.length; i++) {
-        if (fastMovesList[i].name === "Mud Slap") {
-            fastMovesList[i].name = "Mud-Slap";
-        }
-    }
-
-    /* Ajoute les noms français à fastMovesList */
-    let isBroke = false;
-    for (let i = 0; i < fastMovesList.length; i++) {
-        for (let j = 0; j < originalMovesList.length; j++) {
-            for (let k = 0; k < originalMovesList[j].length; k++) {
-                if (originalMovesList[j][k].language.name === "en") {
-                    if (originalMovesList[j][k].name === fastMovesList[i].name) {
-                        fastMovesList[i].name = originalMovesList[j];
-                        isBroke = true;
-                        break;
-                    }
-                }
-            }
-            if (isBroke) {
-                isBroke = false;
-                break;
-            }
-        }
-    }
-
+    await fetch("https://pogoapi.net/api/v1/fast_moves.json").then(res => res.json()).then(Data => fastMovesList = Data).then(() => console.log(fastMovesList))
 }
 
 async function initChargedMovesList() {
 
     /* Défini chargedMovesList */
-    await fetch("https://pogoapi.net/api/v1/charged_moves.json").then(res => res.json()).then(Data => {
-        for (let i = 0; i < Data.length; i++) {
-            chargedMovesList.push(Data[i]);
-        }
-    })
-
-    /* Debug Superpower */
-    for (let i = 0; i < chargedMovesList.length; i++) {
-        if (chargedMovesList[i].name === "Super Power") {
-            chargedMovesList[i].name = "Superpower";
-        }
-    }
-
-    /* Debug X-Scissor */
-    for (let i = 0; i < chargedMovesList.length; i++) {
-        if (chargedMovesList[i].name === "X Scissor") {
-            chargedMovesList[i].name = "X-Scissor";
-        }
-    }
-
-    /* Debug Future Sight */
-    for (let i = 0; i < chargedMovesList.length; i++) {
-        if (chargedMovesList[i].name === "Futuresight") {
-            chargedMovesList[i].name = "Future Sight";
-        }
-    }
-
-    /* Debug Vise Grip */
-    for (let i = 0; i < chargedMovesList.length; i++) {
-        if (chargedMovesList[i].name === "Vice Grip") {
-            chargedMovesList[i].name = "Vise Grip";
-        }
-    }
-
-        /* Debug Power-Up Punch */
-        for (let i = 0; i < chargedMovesList.length; i++) {
-            if (chargedMovesList[i].name === "Power Up Punch") {
-                chargedMovesList[i].name = "Power-Up Punch";
-            }
-        }
-
-    /* Ajoute les noms français à chargedMovesList */
-    let isBroke = false;
-    for (let i = 0; i < chargedMovesList.length; i++) {
-        for (let j = 0; j < originalMovesList.length; j++) {
-            for (let k = 0; k < originalMovesList[j].length; k++) {
-                if (originalMovesList[j][k].language.name === "en") {
-                    if (originalMovesList[j][k].name === chargedMovesList[i].name) {
-                        chargedMovesList[i].name = originalMovesList[j];
-                        isBroke = true;
-                        break;
-                    }
-                }
-            }
-            if (isBroke) {
-                isBroke = false;
-                break;
-            }
-        }
-    }
+    await fetch("https://pogoapi.net/api/v1/charged_moves.json").then(res => res.json()).then(Data => chargedMovesList = Data).then(() => console.log(chargedMovesList))
 
 }
 
-async function initTypesNumbers() {
+async function initWeathersList() {
 
-    /* Défini numberOfTypes et lastTypeId */
-    await fetch("https://pokeapi.co/api/v2/type").then(res => res.json()).then(Data => {
-        numberOfTypes = Data.count;
-    })
-
-    await fetch("https://pokeapi.co/api/v2/type?offset=0&limit=10000").then(res => res.json()).then(Data => {
-        let urlLength = Data.results[numberOfTypes - 1].url.length;
-        lastTypeId = Data.results[numberOfTypes - 1].url.substring(31, urlLength - 1);
-    })
-
-}
-
-async function initTypesList() {
-
-    /* Défini typesList */
-    for (let i = 1; i <= numberOfTypes; i++) {
-        try {
-            await fetch(`https://pokeapi.co/api/v2/type/${i}`).then(res => res.json()).then(Data => {
-                typesList.push(Data.names);
-            })
-        } catch (err) {
-            numberOfTypes = lastTypeId;
-            i = 10000;
-        }
-    }
-
-    await initTypesNumbers();
-
-}
-
-async function initOriginalPokemonsNumber() {
-
-    /* Défini numberOfOriginalPokemons */
-    await fetch("https://pokeapi.co/api/v2/pokemon-species").then(res => res.json()).then(Data => {
-        numberOfOriginalPokemons = Data.count;
-    })
-
-}
-
-async function initOriginalPokemonsList() {
-
-    /* Définit originalPokemonsList */
-    for (let i = 1; i <= numberOfOriginalPokemons; i++) {
-        await fetch(`https://pokeapi.co/api/v2/pokemon-species/${i}`).then(res => res.json()).then(Data => {
-            originalPokemonsList.push(Data);
-        })
-    }
-
+    /* Défini weathersList */
+    await fetch("https://pogoapi.net/api/v1/weather_boosts.json").then(res => res.json()).then(Data => weathersList = Data).then(() => console.log(weathersList))
 }
 
 async function initPokemonsList() {
 
     /* Défini pokemonsList */
-    await fetch("https://pogoapi.net/api/v1/pokemon_stats.json").then(res => res.json()).then(Data => {
-        for (let i = 0; i < Data.length; i++) {
-            pokemonsList.push(Data[i]);
-        }
-    })
-
+    await fetch("https://pogoapi.net/api/v1/pokemon_types.json").then(res => res.json()).then(Data => pokemonsList = Data).then(() => console.log(pokemonsList))
+    addStatsToPokemonsList()
+    addMovesToPokemonsList()
 }
 
-async function addTypesToPokemonsList() {
+async function addStatsToPokemonsList() {
 
-    /* Ajoute les types à pokemonsList */
-    await fetch("https://pogoapi.net/api/v1/pokemon_types.json").then(res => res.json()).then(Data => {
-        for (let i = 0; i < pokemonsList.length; i++) {
-            for (let j = 0; j < Data.length; j++) {
-                if (pokemonsList[i].pokemon_id === Data[j].pokemon_id && pokemonsList[i].form === Data[j].form && pokemonsList[i].pokemon_name === Data[j].pokemon_name) {
-                    pokemonsList[i].type = Data[j].type;
-                    break;
-                }
+    /* Ajoute les stats à pokemonsList */
+    await fetch("https://pogoapi.net/api/v1/pokemon_stats.json").then(res => res.json()).then(Data => {
+        pokemonsList.forEach((el, index) => {
+            if (el.pokemon_name === Data[index].pokemon_name && el.pokemon_id === Data[index].pokemon_id && el.form === Data[index].form) {
+                el.base_attack = Data[index].base_attack
+                el.base_defense = Data[index].base_defense
+                el.base_stamina = Data[index].base_stamina
+            } else {
+                Data.forEach(elData => {
+                    if (el.pokemon_name === elData.pokemon_name && el.pokemon_id === elData.pokemon_id && el.form === elData.form) {
+                        el.base_attack = elData.base_attack
+                        el.base_defense = elData.base_defense
+                        el.base_stamina = elData.base_stamina
+                    }
+                })
             }
-        }
-    })
-
+        })
+    }).then(() => console.log(pokemonsList))
 }
 
 async function addMovesToPokemonsList() {
 
-    /* Ajoute le nom des attaques à pokemonsList */
+    /* Ajoute les attaques à pokemonsList */
     await fetch("https://pogoapi.net/api/v1/current_pokemon_moves.json").then(res => res.json()).then(Data => {
-        for (let i = 0; i < pokemonsList.length; i++) {
-            for (let j = 0; j < Data.length; j++) {
-                if (pokemonsList[i].pokemon_id === Data[j].pokemon_id && pokemonsList[i].form === Data[j].form && pokemonsList[i].pokemon_name === Data[j].pokemon_name) {
-                    pokemonsList[i].fast_moves = Data[j].fast_moves.concat(Data[j].elite_fast_moves);
-                    pokemonsList[i].elite_fast_moves = Data[j].elite_fast_moves;
-                    pokemonsList[i].charged_moves = Data[j].charged_moves.concat(Data[j].elite_charged_moves);
-                    pokemonsList[i].elite_charged_moves = Data[j].elite_charged_moves;
-                    break;
-                }
-            }
-        }
-    })
-
-    /* Debug Mud-Slap */
-    for (let i = 0; i < pokemonsList.length; i++) {
-        for (let j = 0; j < pokemonsList[i].fast_moves.length; j++) {
-            if (pokemonsList[i].fast_moves[j] === "Mud Slap") {
-                pokemonsList[i].fast_moves[j] = "Mud-Slap";
-                break;
-            }
-        }
-    }
-
-    /* Debug Superpower */
-    for (let i = 0; i < pokemonsList.length; i++) {
-        for (let j = 0; j < pokemonsList[i].charged_moves.length; j++) {
-            if (pokemonsList[i].charged_moves[j] === "Super Power") {
-                pokemonsList[i].charged_moves[j] = "Superpower";
-                break;
-            }
-        }
-    }
-
-    /* Debug X-Scissor */
-    for (let i = 0; i < pokemonsList.length; i++) {
-        for (let j = 0; j < pokemonsList[i].charged_moves.length; j++) {
-            if (pokemonsList[i].charged_moves[j] === "X Scissor") {
-                pokemonsList[i].charged_moves[j] = "X-Scissor";
-                break;
-            }
-        }
-    }
-
-    /* Debug Future Sight */
-    for (let i = 0; i < pokemonsList.length; i++) {
-        for (let j = 0; j < pokemonsList[i].charged_moves.length; j++) {
-            if (pokemonsList[i].charged_moves[j] === "Futuresight") {
-                pokemonsList[i].charged_moves[j] = "Future Sight";
-                break;
-            }
-        }
-    }
-
-    /* Debug Vise Grip */
-    for (let i = 0; i < pokemonsList.length; i++) {
-        for (let j = 0; j < pokemonsList[i].charged_moves.length; j++) {
-            if (pokemonsList[i].charged_moves[j] === "Vice Grip") {
-                pokemonsList[i].charged_moves[j] = "Vise Grip";
-                break;
-            }
-        }
-    }
-
-        /* Debug Power-Up Punch */
-        for (let i = 0; i < pokemonsList.length; i++) {
-            for (let j = 0; j < pokemonsList[i].charged_moves.length; j++) {
-                if (pokemonsList[i].charged_moves[j] === "Power Up Punch") {
-                    pokemonsList[i].charged_moves[j] = "Power-Up Punch";
-                    break;
-                }
-            }
-        }
-
-    /* Ajoute les caractéristiques des attaques immédiates à pokemonsList depuis fastMovesList */
-    let isBroke = false;
-    for (let i = 0; i < pokemonsList.length; i++) {
-        for (let j = 0; j < pokemonsList[i].fast_moves.length; j++) {
-            for (let k = 0; k < fastMovesList.length; k++) {
-                for (let l = 0; l < fastMovesList[k].name.length; l++) {
-                    if (pokemonsList[i].fast_moves[j] === fastMovesList[k].name[l].name && fastMovesList[k].name[l].language.name === "en") {
-                        pokemonsList[i].fast_moves[j] = fastMovesList[k];
-                        isBroke = true;
-                        break;
+        pokemonsList.forEach((el, index) => {
+            if (el.pokemon_name === Data[index].pokemon_name && el.pokemon_id === Data[index].pokemon_id && el.form === Data[index].form) {
+                el.charged_moves = Data[index].charged_moves
+                el.elite_charged_moves = Data[index].elite_charged_moves
+                el.fast_moves = Data[index].fast_moves
+                el.elite_fast_moves = Data[index].elite_fast_moves
+            } else {
+                Data.forEach(elData => {
+                    if (el.pokemon_name === elData.pokemon_name && el.pokemon_id === elData.pokemon_id && el.form === elData.form) {
+                        el.charged_moves = elData.charged_moves
+                        el.elite_charged_moves = elData.elite_charged_moves
+                        el.fast_moves = elData.fast_moves
+                        el.elite_fast_moves = elData.elite_fast_moves
                     }
-                }
-                if (isBroke) {
-                    isBroke = false;
-                    break;
-                }
+                })
             }
-        }
-    }
-
-    /* Ajoute les caractéristiques des attaques chargées à pokemonsList depuis chargedMovesList */
-    for (let i = 0; i < pokemonsList.length; i++) {
-        for (let j = 0; j < pokemonsList[i].charged_moves.length; j++) {
-            for (let k = 0; k < chargedMovesList.length; k++) {
-                for (let l = 0; l < chargedMovesList[k].name.length; l++) {
-                    if (pokemonsList[i].charged_moves[j] === chargedMovesList[k].name[l].name && chargedMovesList[k].name[l].language.name === "en") {
-                        pokemonsList[i].charged_moves[j] = chargedMovesList[k];
-                        isBroke = true;
-                        break;
-                    }
-                }
-                if (isBroke) {
-                    isBroke = false;
-                    break;
-                }
-            }
-        }
-    }
-
-}
-
-async function addFrenchNamesToPokemonsList() {
-
-    /* Ajoute le nom français des Pokémons à pokemonsList */
-    for (let i = 0; i < pokemonsList.length; i++) {
-        for (let j = 0; j < originalPokemonsList.length; j++) {
-            if (pokemonsList[i].pokemon_id === originalPokemonsList[j].id && pokemonsList[i].pokemon_name === originalPokemonsList[j].names[8].name) {
-                pokemonsList[i].pokemon_name_fr = originalPokemonsList[j].names[4].name;
-                break;
-            }
-        }
-    }
-
-}
-
-async function addFrenchTypesToPokemonsList() {
-
-    /* Ajoute les types en français à pokemonsList */
-    for (let i = 0; i < pokemonsList.length; i++) {
-        pokemonsList[i].type_fr = [];
-        for (let j = 0; j < pokemonsList[i].type.length; j++) {
-            for (let k = 0; k < typesList.length; k++) {
-                if (pokemonsList[i].type[j] === typesList[k][7].name) {
-                    pokemonsList[i].type_fr[j] = typesList[k][3].name;
-                    break;
-                }
-            }
-        }
-    }
-
-}
-
-function initWeathersList() {
-
-    /* Défini l'objet de chaque météo */
-    for (let i = 0; i < 8; i++) {
-        weathersList[i] = new Object();
-    }
-
-    /* Défini les caractéristiques des météos */
-    weathersList[0].name = "Aucune";
-    weathersList[0].types = ["None"];
-    weathersList[1].name = "Temps clair / ensoleillé (bonus: Feu / Plante / Sol)";
-    weathersList[1].types = ["Fire", "Grass", "Ground"];
-    weathersList[2].name = "Brouillard (bonus: Spectre / Ténèbres)";
-    weathersList[2].types = ["Ghost", "Dark"];
-    weathersList[3].name = "Couvert (bonus: Poison / Combat / Fée)";
-    weathersList[3].types = ["Poison", "Fighting", "Fairy"];
-    weathersList[4].name = "Quelques nuages (bonus: Roche / Normal)";
-    weathersList[4].types = ["Normal", "Rock"];
-    weathersList[5].name = "Neige (bonus: Acier / Glace)";
-    weathersList[5].types = ["Steel", "Ice"];
-    weathersList[6].name = "Pluvieux (bonus: Insecte / Eau / Électrik)";
-    weathersList[6].types = ["Bug", "Water", "Electric"];
-    weathersList[7].name = "Vent (bonus: Dragon / Vol / Psy)";
-    weathersList[7].types = ["Dragon", "Flying", "Psychic"];
-
+        })
+    }).then(() => console.log(pokemonsList))
 }
 
 async function initCpMultipliersList() {
@@ -863,32 +532,6 @@ function writeResults() {
             }
 
             resultsTable.children[i].appendChild(newColumn);
-        }
-    }
-
-}
-
-function debugMove(moveName) {
-
-    for (let i = 0; i < originalMovesList.length; i++) {
-        for (let j = 0; j < originalMovesList[i].length; j++) {
-            if (originalMovesList[i][j].name == moveName) {
-                console.log("originalMovesList", i);
-            }
-        }
-    }
-    for (let i = 0; i < fastMovesList.length; i++) {
-        for (let j = 0; j < fastMovesList[i].name.length; j++) {
-            if (fastMovesList[i].name[j].name == moveName || fastMovesList[i].name == moveName) {
-                console.log("fastMovesList", i);
-            }
-        }
-    }
-    for (let i = 0; i < chargedMovesList.length; i++) {
-        for (let j = 0; j < chargedMovesList[i].name.length; j++) {
-            if (chargedMovesList[i].name[j].name == moveName || chargedMovesList[i].name == moveName) {
-                console.log("chargedMovesList", i);
-            }
         }
     }
 
