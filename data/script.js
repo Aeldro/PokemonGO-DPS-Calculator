@@ -1,9 +1,9 @@
-fetch("https://pogoapi.net/api/v1/fast_moves.json").then(res => res.json()).then(data => console.log(data));
-fetch("https://pogoapi.net/api/v1/cp_multiplier.json").then(res => res.json()).then(data => console.log(data));
-fetch("https://pogoapi.net/api/v1/current_pokemon_moves.json").then(res => res.json()).then(data => console.log(data));
-fetch("https://pogoapi.net/api/v1/community_days.json").then(res => res.json()).then(data => console.log(data));
-fetch("https://pokeapi.co/api/v2/pokemon/19").then(res => res.json()).then(data => console.log(data));
-fetch("https://pokeapi.co/api/v2/move/?offset=0&limit=1000").then(res => res.json()).then(data => console.log(data));
+// fetch("https://pogoapi.net/api/v1/fast_moves.json").then(res => res.json()).then(data => console.log(data));
+// fetch("https://pogoapi.net/api/v1/cp_multiplier.json").then(res => res.json()).then(data => console.log(data));
+// fetch("https://pogoapi.net/api/v1/current_pokemon_moves.json").then(res => res.json()).then(data => console.log(data));
+// fetch("https://pogoapi.net/api/v1/community_days.json").then(res => res.json()).then(data => console.log(data));
+// fetch("https://pokeapi.co/api/v2/pokemon/19").then(res => res.json()).then(data => console.log(data));
+// fetch("https://pokeapi.co/api/v2/move/?offset=0&limit=1000").then(res => res.json()).then(data => console.log(data));
 
 /* ******************** VARIABLES ********************* */
 
@@ -17,7 +17,6 @@ const calcButton = document.getElementById('calc_button');
 const shadowCheckbox = document.getElementById('shadow_selection');
 const levelMenu = document.getElementById('level_selection');
 const ivMenu = document.getElementById('attackiv_selection');
-const battleTimeMenu = document.getElementById('battletime_selection');
 const resultsTable = document.getElementById('results_table');
 const timeResult = document.getElementById('time_result');
 
@@ -28,7 +27,40 @@ let chargedMovesList = [];
 
 let pokemonsList = [];
 
-let weathersList = [];
+let weathersList = [
+    {
+        name: "None",
+        type: [""]
+    },
+    {
+        name: "Clear (Bonus: Grass, Ground, Fire)",
+        type: ["Grass", "Ground", "Fire"]
+    },
+    {
+        name: "Fog (Bonus: Dark, Ghost)",
+        type: ["Dark", "Ghost"]
+    },
+    {
+        name: "Overcast (Bonus: Fairy, Fighting, Poison)",
+        type: ["Fairy", "Fighting", "Poison"]
+    },
+    {
+        name: "Partly Cloudy (Bonus: Normal, Rock)",
+        type: ["Normal", "Rock"]
+    },
+    {
+        name: "Rainy (Bonus: Water, Electric, Bug)",
+        type: ["Water", "Electric", "Bug"]
+    },
+    {
+        name: "Snow (Bonus: Ice, Steel)",
+        type: ["Ice", "Steel"]
+    },
+    {
+        name: "Windy (Bonus: Dragon, Flying, Psychic)",
+        type: ["Dragon", "Flying", "Psychic"]
+    },
+];
 
 let cpMultipliersList = [];
 
@@ -95,9 +127,6 @@ async function initStart() {
     loadingMessage.textContent = "Initialisation de la liste des Pokémons...";
     await initPokemonsList();
 
-    loadingMessage.textContent = "Initialisation des météos...";
-    await initWeathersList();
-
     loadingMessage.textContent = "Finalisation...";
     await initCpMultipliersList();
 
@@ -108,36 +137,36 @@ async function initStart() {
 
 }
 
-async function initFastMovesList() {
+/* ******************** Construction de la base de données ********************* */
 
-    /* Défini fastMovesList */
+/* Défini fastMovesList */
+async function initFastMovesList() {
     await fetch("https://pogoapi.net/api/v1/fast_moves.json").then(res => res.json()).then(Data => fastMovesList = Data).then(() => console.log(fastMovesList))
 }
 
+/* Défini chargedMovesList */
 async function initChargedMovesList() {
-
-    /* Défini chargedMovesList */
     await fetch("https://pogoapi.net/api/v1/charged_moves.json").then(res => res.json()).then(Data => chargedMovesList = Data).then(() => console.log(chargedMovesList))
-
 }
 
-async function initWeathersList() {
+// /* Défini weathersList */
+// async function initWeathersList() {
+//     await fetch("https://pogoapi.net/api/v1/weather_boosts.json").then(res => res.json()).then(Data => {
 
-    /* Défini weathersList */
-    await fetch("https://pogoapi.net/api/v1/weather_boosts.json").then(res => res.json()).then(Data => weathersList = Data).then(() => console.log(weathersList))
-}
+//     }).then(() => console.log(weathersList))
+// }
 
+/* Défini pokemonsList */
 async function initPokemonsList() {
-
-    /* Défini pokemonsList */
-    await fetch("https://pogoapi.net/api/v1/pokemon_types.json").then(res => res.json()).then(Data => pokemonsList = Data).then(() => console.log(pokemonsList))
+    await fetch("https://pogoapi.net/api/v1/pokemon_types.json").then(res => res.json()).then(Data => pokemonsList = Data)
     await addStatsToPokemonsList()
     await addMovesToPokemonsList()
+    await addMovesCaracsToPokemonsList()
+    await addEliteTagsToPokemonsList()
 }
 
+/* Ajoute les stats à pokemonsList */
 async function addStatsToPokemonsList() {
-
-    /* Ajoute les stats à pokemonsList */
     await fetch("https://pogoapi.net/api/v1/pokemon_stats.json").then(res => res.json()).then(Data => {
         pokemonsList.forEach((el, index) => {
             if (el.pokemon_name === Data[index].pokemon_name && el.pokemon_id === Data[index].pokemon_id && el.form === Data[index].form) {
@@ -154,12 +183,11 @@ async function addStatsToPokemonsList() {
                 })
             }
         })
-    }).then(() => console.log(pokemonsList))
+    })
 }
 
+/* Ajoute les attaques à pokemonsList */
 async function addMovesToPokemonsList() {
-
-    /* Ajoute les attaques à pokemonsList */
     await fetch("https://pogoapi.net/api/v1/current_pokemon_moves.json").then(res => res.json()).then(Data => {
         pokemonsList.forEach((el, index) => {
             if (el.pokemon_name === Data[index].pokemon_name && el.pokemon_id === Data[index].pokemon_id && el.form === Data[index].form) {
@@ -181,9 +209,79 @@ async function addMovesToPokemonsList() {
     }).then(() => console.log(pokemonsList))
 }
 
-async function initCpMultipliersList() {
+/* Ajoute les caractéristiques des attaques à pokemonsList */
+async function addMovesCaracsToPokemonsList() {
 
-    /* Défini cpMultipliersList */
+    for (let i = 0; i < pokemonsList.length; i++) {
+        for (let j = 0; j < pokemonsList[i].fast_moves.length; j++) {
+            for (let k = 0; k < fastMovesList.length; k++) {
+                if (pokemonsList[i].fast_moves[j] === fastMovesList[k].name) {
+                    pokemonsList[i].fast_moves[j] = fastMovesList[k]
+                    break;
+                }
+            }
+        }
+    }
+
+    for (let i = 0; i < pokemonsList.length; i++) {
+        for (let j = 0; j < pokemonsList[i].elite_fast_moves.length; j++) {
+            for (let k = 0; k < fastMovesList.length; k++) {
+                if (pokemonsList[i].elite_fast_moves[j] === fastMovesList[k].name) {
+                    pokemonsList[i].elite_fast_moves[j] = fastMovesList[k]
+                    break;
+                }
+            }
+        }
+    }
+
+    for (let i = 0; i < pokemonsList.length; i++) {
+        for (let j = 0; j < pokemonsList[i].charged_moves.length; j++) {
+            for (let k = 0; k < chargedMovesList.length; k++) {
+                if (pokemonsList[i].charged_moves[j] === chargedMovesList[k].name) {
+                    pokemonsList[i].charged_moves[j] = chargedMovesList[k]
+                    break;
+                }
+            }
+        }
+    }
+
+    for (let i = 0; i < pokemonsList.length; i++) {
+        for (let j = 0; j < pokemonsList[i].elite_charged_moves.length; j++) {
+            for (let k = 0; k < chargedMovesList.length; k++) {
+                if (pokemonsList[i].elite_charged_moves[j] === chargedMovesList[k].name) {
+                    pokemonsList[i].elite_charged_moves[j] = chargedMovesList[k]
+                    break;
+                }
+            }
+        }
+    }
+
+}
+
+/* Ajoute "elite" au nom des attaques élites de pokemonsList */
+async function addEliteTagsToPokemonsList() {
+    // pokemonsList.forEach(firstEl => {
+    //     firstEl.elite_fast_moves.forEach(secEl => {
+    //         secEl.name = `${secEl.name} (elite)`
+    //     })
+    //     firstEl.elite_charged_moves.forEach(thirdEl => {
+    //         thirdEl.name = `${thirdEl.name} (elite)`
+    //     })
+    // })
+
+    // for (let i = 0; i < pokemonsList.length; i++) {
+    //     for (let j = 0; j < pokemonsList[i].elite_fast_moves.length; j++) {
+    //         pokemonsList[i].elite_fast_moves[j].name = `${pokemonsList[i].elite_fast_moves[j].name} (elite)`
+    //     }
+    //     for (let j = 0; j < pokemonsList[i].elite_charged_moves.length; j++) {
+    //         pokemonsList[i].elite_charged_moves[j].name = `${pokemonsList[i].elite_charged_moves[j].name} (elite)`
+    //     }
+    // }
+}
+
+
+/* Défini cpMultipliersList */
+async function initCpMultipliersList() {
     await fetch("https://pogoapi.net/api/v1/cp_multiplier.json").then(res => res.json()).then(Data => {
         for (let i = 0; i < Data.length; i++) {
             cpMultipliersList.push(Data[i]);
@@ -219,6 +317,8 @@ async function initCpMultipliersList() {
 
 }
 
+/* ******************** Construction du DOM ********************* */
+
 function insertPokemonsList() {
 
     while (pokemonMenu.firstChild) {
@@ -229,9 +329,9 @@ function insertPokemonsList() {
         let newOption = document.createElement("option");
         let newPokemon;
         if (pokemonsList[i].form != "Normal") {
-            newPokemon = pokemonsList[i].pokemon_name_fr + " (" + pokemonsList[i].form + ")";
+            newPokemon = pokemonsList[i].pokemon_name + " (" + pokemonsList[i].form + ")";
         } else {
-            newPokemon = pokemonsList[i].pokemon_name_fr;
+            newPokemon = pokemonsList[i].pokemon_name;
         }
         newOption.value = i;
         newOption.textContent = newPokemon;
@@ -261,13 +361,15 @@ function setTypes(pokemonIndex) {
         pokemonTypes.removeChild(pokemonTypes.firstChild);
     }
 
-    for (let i = 0; i < pokemonsList[pokemonIndex].type_fr.length; i++) {
+    for (let i = 0; i < pokemonsList[pokemonIndex].type.length; i++) {
         let newType = document.createElement("span");
-        newType.textContent = pokemonsList[pokemonIndex].type_fr[i];
+        newType.textContent = pokemonsList[pokemonIndex].type[i];
         pokemonTypes.appendChild(newType);
     }
 
 }
+
+/* ******************** Calcul du DPS ********************* */
 
 function launchCalc() {
 
@@ -280,13 +382,13 @@ function launchCalc() {
         targetDamageCalc();
         pokemonDamageCalc();
         setCombinationsTable();
-        eliteTag();
         dpsCalc();
         writeResults()
     } catch (err) {
         loadingMessage.textContent = "Une erreur a été rencontrée.";
-        window.alert(`⚠️ Attention ! ⚠️ \n \n Le Pokémon séletionné a rencontré une erreur. Merci de prévenir le créateur de l'application en lui indiquant le Pokémon qui pose problème. \n \n ❌ ${currentPokemon.pokemon_name_fr} (${currentPokemon.form})`);
+        window.alert(`⚠️ Attention ! ⚠️ \n \n Le Pokémon séletionné a rencontré une erreur. Merci de prévenir le créateur de l'application en lui indiquant le Pokémon qui pose problème. \n \n ❌ ${currentPokemon.pokemon_name} (${currentPokemon.form})`);
         loadingScreen.classList.add("invisible");
+        console.log(err);
     }
     loadingScreen.classList.add("invisible");
 
@@ -381,8 +483,8 @@ function pokemonDamageCalc() {
                 stabMultiplier = 1;
             }
         }
-        for (let j = 0; j < currentWeather.types.length; j++) {
-            if (currentPokemon.fast_moves[i].type === currentWeather.types[j]) {
+        for (let j = 0; j < currentWeather.type.length; j++) {
+            if (currentPokemon.fast_moves[i].type === currentWeather.type[j]) {
                 weatherMultiplier = 1.2;
                 break;
             } else {
@@ -401,8 +503,8 @@ function pokemonDamageCalc() {
                 stabMultiplier = 1;
             }
         }
-        for (let j = 0; j < currentWeather.types.length; j++) {
-            if (currentPokemon.charged_moves[i].type === currentWeather.types[j]) {
+        for (let j = 0; j < currentWeather.type.length; j++) {
+            if (currentPokemon.charged_moves[i].type === currentWeather.type[j]) {
                 weatherMultiplier = 1.2;
                 break;
             } else {
@@ -412,16 +514,78 @@ function pokemonDamageCalc() {
         currentPokemon.charged_moves[i].current_damage = Math.floor(0.5 * currentPokemon.charged_moves[i].power * pokemonAtk / targetDef * offShadowMultiplier * weatherMultiplier * stabMultiplier) + 1;
     }
 
+    for (let i = 0; i < currentPokemon.elite_fast_moves.length; i++) {
+        for (let j = 0; j < currentPokemon.type.length; j++) {
+            if (currentPokemon.elite_fast_moves[i].type === currentPokemon.type[j]) {
+                stabMultiplier = 1.2;
+                break;
+            } else {
+                stabMultiplier = 1;
+            }
+        }
+        for (let j = 0; j < currentWeather.type.length; j++) {
+            if (currentPokemon.elite_fast_moves[i].type === currentWeather.type[j]) {
+                weatherMultiplier = 1.2;
+                break;
+            } else {
+                weatherMultiplier = 1;
+            }
+        }
+        currentPokemon.elite_fast_moves[i].current_damage = Math.floor(0.5 * currentPokemon.elite_fast_moves[i].power * pokemonAtk / targetDef * offShadowMultiplier * weatherMultiplier * stabMultiplier) + 1;
+    }
+
+    for (let i = 0; i < currentPokemon.elite_charged_moves.length; i++) {
+        for (let j = 0; j < currentPokemon.type.length; j++) {
+            if (currentPokemon.elite_charged_moves[i].type === currentPokemon.type[j]) {
+                stabMultiplier = 1.2;
+                break;
+            } else {
+                stabMultiplier = 1;
+            }
+        }
+        for (let j = 0; j < currentWeather.type.length; j++) {
+            if (currentPokemon.elite_charged_moves[i].type === currentWeather.type[j]) {
+                weatherMultiplier = 1.2;
+                break;
+            } else {
+                weatherMultiplier = 1;
+            }
+        }
+        currentPokemon.elite_charged_moves[i].current_damage = Math.floor(0.5 * currentPokemon.elite_charged_moves[i].power * pokemonAtk / targetDef * offShadowMultiplier * weatherMultiplier * stabMultiplier) + 1;
+    }
+
 }
 
 function setCombinationsTable() {
 
     currentCombinationsList = [];
+
     for (let i = 0; i < currentPokemon.fast_moves.length; i++) {
         for (let j = 0; j < currentPokemon.charged_moves.length; j++) {
             currentCombination = {};
             currentCombination.fast_move = currentPokemon.fast_moves[i];
             currentCombination.charged_move = currentPokemon.charged_moves[j];
+            currentCombinationsList.push(currentCombination);
+        }
+        for (let j = 0; j < currentPokemon.elite_charged_moves.length; j++) {
+            currentCombination = {};
+            currentCombination.fast_move = currentPokemon.fast_moves[i];
+            currentCombination.charged_move = currentPokemon.elite_charged_moves[j];
+            currentCombinationsList.push(currentCombination);
+        }
+    }
+
+    for (let i = 0; i < currentPokemon.elite_fast_moves.length; i++) {
+        for (let j = 0; j < currentPokemon.charged_moves.length; j++) {
+            currentCombination = {};
+            currentCombination.fast_move = currentPokemon.elite_fast_moves[i];
+            currentCombination.charged_move = currentPokemon.charged_moves[j];
+            currentCombinationsList.push(currentCombination);
+        }
+        for (let j = 0; j < currentPokemon.elite_charged_moves.length; j++) {
+            currentCombination = {};
+            currentCombination.fast_move = currentPokemon.elite_fast_moves[i];
+            currentCombination.charged_move = currentPokemon.elite_charged_moves[j];
             currentCombinationsList.push(currentCombination);
         }
     }
@@ -459,16 +623,10 @@ function writeResults() {
             let newColumn = document.createElement("td");
             switch (j) {
                 case 0:
-                    for (let k = 0; k < currentCombinationsList[i].fast_move.name.length; k++) {
-                        newColumn.textContent = currentCombinationsList[i].fast_move.name[k].name;
-                        break;
-                    }
+                    newColumn.textContent = currentCombinationsList[i].fast_move.name;
                     break;
                 case 1:
-                    for (let k = 0; k < currentCombinationsList[i].charged_move.name.length; k++) {
-                        newColumn.textContent = currentCombinationsList[i].charged_move.name[k].name;
-                        break;
-                    }
+                    newColumn.textContent = currentCombinationsList[i].charged_move.name;
                     break;
                 case 2:
                     newColumn.textContent = currentCombinationsList[i].cycle_dps.toFixed(2);

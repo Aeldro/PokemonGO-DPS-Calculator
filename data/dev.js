@@ -3,7 +3,7 @@
 let fastMovesList = [];
 let chargedMovesList = [];
 
-let weathersList = []; 
+let weathersList = [];
 
 let pokemonsList = []
 
@@ -11,10 +11,10 @@ let pokemonsList = []
 /* ******************** FONCTIONS ********************* */
 
 async function initStart() {
-    initFastMovesList()
-    initChargedMovesList()
-    initWeathersList()
-    initPokemonsList()
+    await initFastMovesList()
+    await initChargedMovesList()
+    await initWeathersList()
+    await initPokemonsList()
 }
 
 async function initFastMovesList() {
@@ -39,7 +39,7 @@ async function initWeathersList() {
 async function initPokemonsList() {
 
     /* Défini pokemonsList */
-    await fetch("https://pogoapi.net/api/v1/pokemon_types.json").then(res => res.json()).then(Data => pokemonsList = Data).then(() => console.log(pokemonsList))
+    await fetch("https://pogoapi.net/api/v1/pokemon_types.json").then(res => res.json()).then(Data => pokemonsList = Data)
     addStatsToPokemonsList()
     addMovesToPokemonsList()
 }
@@ -63,7 +63,7 @@ async function addStatsToPokemonsList() {
                 })
             }
         })
-    }).then(() => console.log(pokemonsList))
+    })
 }
 
 async function addMovesToPokemonsList() {
@@ -88,6 +88,56 @@ async function addMovesToPokemonsList() {
             }
         })
     }).then(() => console.log(pokemonsList))
+    addMovesCaracsToPokemonsList()
 }
+
+async function addMovesCaracsToPokemonsList() {
+
+    for (let i = 0; i < pokemonsList.length; i++) {
+        for (let j = 0; j < pokemonsList[i].fast_moves.length; j++) {
+            for (let k = 0; k < fastMovesList.length; k++) {
+                if(pokemonsList[i].fast_moves[j] === fastMovesList[k].name) {
+                    pokemonsList[i].fast_moves[j] = fastMovesList[k]
+                    break;
+                }
+            }
+        }
+    }
+
+    for (let i = 0; i < pokemonsList.length; i++) {
+        for (let j = 0; j < pokemonsList[i].elite_fast_moves.length; j++) {
+            for (let k = 0; k < fastMovesList.length; k++) {
+                if(pokemonsList[i].elite_fast_moves[j] === fastMovesList[k].name) {
+                    pokemonsList[i].elite_fast_moves[j] = fastMovesList[k]
+                    break;
+                }
+            }
+        }
+    }
+
+    for (let i = 0; i < pokemonsList.length; i++) {
+        for (let j = 0; j < pokemonsList[i].charged_moves.length; j++) {
+            for (let k = 0; k < chargedMovesList.length; k++) {
+                if(pokemonsList[i].charged_moves[j] === chargedMovesList[k].name) {
+                    pokemonsList[i].charged_moves[j] = chargedMovesList[k]
+                    break;
+                }
+            }
+        }
+    }
+
+    for (let i = 0; i < pokemonsList.length; i++) {
+        for (let j = 0; j < pokemonsList[i].elite_charged_moves.length; j++) {
+            for (let k = 0; k < chargedMovesList.length; k++) {
+                if(pokemonsList[i].elite_charged_moves[j] === chargedMovesList[k].name) {
+                    pokemonsList[i].elite_charged_moves[j] = chargedMovesList[k]
+                    break;
+                }
+            }
+        }
+    }
+
+}
+
 
 initStart()
