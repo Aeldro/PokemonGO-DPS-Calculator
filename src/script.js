@@ -571,6 +571,9 @@ function setCombinationsTable() {
             currentCombination = {};
             currentCombination.fast_move = currentPokemon.fast_moves[i];
             currentCombination.charged_move = currentPokemon.elite_charged_moves[j];
+            if (!(currentCombination.charged_move.name.includes(" (elite)"))) {
+                currentCombination.charged_move.name += " (elite)"
+            }
             currentCombinationsList.push(currentCombination);
         }
     }
@@ -579,13 +582,22 @@ function setCombinationsTable() {
         for (let j = 0; j < currentPokemon.charged_moves.length; j++) {
             currentCombination = {};
             currentCombination.fast_move = currentPokemon.elite_fast_moves[i];
+            if (!(currentCombination.fast_move.name.includes(" (elite)"))) {
+                currentCombination.fast_move.name += " (elite)"
+            }
             currentCombination.charged_move = currentPokemon.charged_moves[j];
             currentCombinationsList.push(currentCombination);
         }
         for (let j = 0; j < currentPokemon.elite_charged_moves.length; j++) {
             currentCombination = {};
             currentCombination.fast_move = currentPokemon.elite_fast_moves[i];
+            if (!(currentCombination.fast_move.name.includes(" (elite)"))) {
+                currentCombination.fast_move.name += " (elite)"
+            }
             currentCombination.charged_move = currentPokemon.elite_charged_moves[j];
+            if (!(currentCombination.charged_move.name.includes(" (elite)"))) {
+                currentCombination.charged_move.name += " (elite)"
+            }
             currentCombinationsList.push(currentCombination);
         }
     }

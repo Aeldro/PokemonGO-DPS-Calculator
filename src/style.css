@@ -1,5 +1,5 @@
 body {
-    background-image: url(background.jpg);
+    background-image: url(assets/background.jpg);
     background-attachment: fixed;
     color: white;
     text-shadow: 2px 0 0 black, -2px 0 0 black, 0 2px 0 black, 0 -2px 0 black, 1px 1px black, -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black;
@@ -155,7 +155,7 @@ button:hover {
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    background-image: url(shadow.jpg);
+    background-image: url(assets/shadow.jpg);
     background-position: 200%;
 }
 
