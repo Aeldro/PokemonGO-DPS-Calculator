@@ -564,12 +564,15 @@ function setCombinationsTable() {
         for (let j = 0; j < currentPokemon.charged_moves.length; j++) {
             currentCombination = {};
             currentCombination.fast_move = currentPokemon.fast_moves[i];
+            currentCombination.fast_move.name = currentCombination.fast_move.name.replace(" (elite)", "")
             currentCombination.charged_move = currentPokemon.charged_moves[j];
+            currentCombination.charged_move.name = currentCombination.charged_move.name.replace(" (elite)", "")
             currentCombinationsList.push(currentCombination);
         }
         for (let j = 0; j < currentPokemon.elite_charged_moves.length; j++) {
             currentCombination = {};
             currentCombination.fast_move = currentPokemon.fast_moves[i];
+            currentCombination.fast_move.name = currentCombination.fast_move.name.replace(" (elite)", "")
             currentCombination.charged_move = currentPokemon.elite_charged_moves[j];
             if (!(currentCombination.charged_move.name.includes(" (elite)"))) {
                 currentCombination.charged_move.name += " (elite)"
@@ -586,6 +589,7 @@ function setCombinationsTable() {
                 currentCombination.fast_move.name += " (elite)"
             }
             currentCombination.charged_move = currentPokemon.charged_moves[j];
+            currentCombination.charged_move.name = currentCombination.charged_move.name.replace(" (elite)", "")
             currentCombinationsList.push(currentCombination);
         }
         for (let j = 0; j < currentPokemon.elite_charged_moves.length; j++) {
