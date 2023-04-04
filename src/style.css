@@ -1,0 +1,343 @@
+/* Blocs */
+
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-image: url(assets/background.jpg);
+  background-attachment: fixed;
+  color: white;
+  text-shadow: 2px 0 0 black, -2px 0 0 black, 0 2px 0 black, 0 -2px 0 black,
+    1px 1px black, -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black;
+  font-family: Helvetica, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+h1 {
+  text-align: center;
+  font-size: 2rem;
+  margin: 0.5rem;
+}
+
+h2 {
+  text-align: center;
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+#bloc {
+  border: 2px black solid;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  background-color: #383838;
+  width: 90%;
+  max-width: 1200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#inputs {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+#top_inputs {
+  width: 100%;
+}
+
+#pokemon_selection_space {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 1rem auto;
+  gap: 0.8rem;
+}
+
+#pokemon_types_section {
+  display: flex;
+  justify-content: space-around;
+  width: 80%;
+  max-width: 25rem;
+  font-size: 1.2rem;
+}
+
+#intermediate_inputs {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  background-image: url(assets/shadow.jpg);
+  background-position: 200%;
+  height: 3rem;
+  width: 100%;
+  gap: 0.5rem;
+}
+
+#intermediate_inputs label {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+#shadow_image {
+  height: 70%;
+}
+
+#shadow_selection {
+  height: 80%;
+  width: 1.5rem;
+}
+
+#bottom_inputs {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin: 1rem auto;
+  width: 100%;
+}
+
+.selection_space {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.selection_space div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+#comment_section {
+  border: 2px black solid;
+  margin-bottom: 1.5rem;
+  background-color: #383838;
+  width: 90%;
+  max-width: 1200px;
+  padding: 0.3rem;
+}
+
+footer {
+  width: 100%;
+  background-color: #404040;
+  margin-top: 2rem;
+}
+
+footer p {
+  margin-left: 0.7rem;
+}
+
+/* Results */
+
+#results {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 95%;
+  margin: 0.4rem auto;
+  gap: 0.4rem;
+}
+
+#time_result_container {
+  width: 100%;
+}
+
+table {
+  width: 100%;
+}
+
+#time_result_title {
+  font-weight: bold;
+}
+
+tr,
+td,
+th {
+  border: 1px black solid;
+  font-size: 0.7rem;
+  text-align: center;
+  padding: 0.2rem;
+}
+
+th {
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.number_cells {
+  text-align: center;
+  font-size: 18px;
+  margin: auto;
+}
+
+/* Elements */
+
+label {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  font-size: 1.1rem;
+}
+
+select,
+.range {
+  width: 80%;
+  max-width: 25rem;
+}
+
+select {
+  font-size: 1rem;
+}
+
+option {
+  font-size: 0.7rem;
+}
+
+hr {
+  width: 90%;
+}
+
+.type {
+  padding: 0.1rem 0.8rem;
+  border-radius: 1rem;
+}
+
+button {
+  margin: auto;
+  width: 40%;
+  max-width: 25rem;
+  font-size: 1.3rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
+}
+
+button:hover {
+  box-shadow: 0 0 0.8rem #436fa1;
+}
+
+input:focus,
+select:focus {
+  box-shadow: 0 0 0.8rem #436fa1;
+}
+
+option:focus {
+  box-shadow: 0 0 0.8rem #26405e;
+}
+
+/* Chargement de la page */
+
+.invisible {
+  display: none;
+}
+
+#loading_container {
+  background-color: RGB(110, 110, 110, 90%);
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  text-align: center;
+}
+
+#spinning_pokeball {
+  display: block;
+  margin: auto;
+  width: 100px;
+  animation: rotation 1s linear infinite;
+  position: relative;
+  top: 50%;
+}
+
+#loading_message {
+  position: relative;
+  top: 50%;
+  background-color: RGB(0, 0, 0, 40%);
+  padding: 5px;
+  /* text-shadow: none; */
+}
+
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media screen and (min-width: 320px) {
+  tr,
+  td,
+  th {
+    font-size: 0.8rem;
+  }
+
+  label {
+    font-size: 1.5rem;
+  }
+
+  select {
+    font-size: 1.5rem;
+  }
+
+  option {
+    font-size: 0.9rem;
+  }
+}
+
+@media screen and (min-width: 500px) {
+  tr,
+  td,
+  th {
+    font-size: 1rem;
+    padding: 0.8rem;
+  }
+}
+
+@media screen and (min-width: 800px) {
+  h1 {
+    font-size: 3rem;
+  }
+
+  h2 {
+    font-size: 2rem;
+  }
+
+  tr,
+  td,
+  th {
+    font-size: 1.6rem;
+    padding: 1rem;
+  }
+
+  option {
+    font-size: 1.5rem;
+  }
+
+  #bottom_inputs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+  }
+
+  #weather_selection_space {
+    grid-column: span 2;
+  }
+
+  #calc_button {
+    grid-column: span 2;
+  }
+
+  button {
+    font-size: 1.8rem;
+  }
+}
