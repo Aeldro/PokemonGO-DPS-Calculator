@@ -55,7 +55,7 @@ h2 {
   flex-direction: column;
   align-items: center;
   margin: 1rem auto;
-  gap: 0.5rem;
+  gap: 0.8rem;
 }
 
 #pokemon_types_section {
@@ -126,15 +126,13 @@ h2 {
 }
 
 footer {
-  background-color: #383838;
   width: 100%;
-}
-
-footer {
-  width: 100%;
-  text-align: center;
   background-color: #404040;
   margin-top: 2rem;
+}
+
+footer p {
+  margin-left: 0.7rem;
 }
 
 /* Results */
@@ -205,6 +203,34 @@ option {
 
 hr {
   width: 90%;
+}
+
+.type {
+  padding: 0.1rem 0.8rem;
+  border-radius: 1rem;
+}
+
+button {
+  margin: auto;
+  width: 40%;
+  max-width: 25rem;
+  font-size: 1.3rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
+}
+
+button:hover {
+  box-shadow: 0 0 0.8rem #436fa1;
+}
+
+input:focus,
+select:focus {
+  box-shadow: 0 0 0.8rem #436fa1;
+}
+
+option:focus {
+  box-shadow: 0 0 0.8rem #26405e;
 }
 
 /* Chargement de la page */
@@ -295,5 +321,23 @@ hr {
 
   option {
     font-size: 1.5rem;
+  }
+
+  #bottom_inputs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+  }
+
+  #weather_selection_space {
+    grid-column: span 2;
+  }
+
+  #calc_button {
+    grid-column: span 2;
+  }
+
+  button {
+    font-size: 1.8rem;
   }
 }

@@ -364,6 +364,85 @@ function setTypes(pokemonIndex) {
     for (let i = 0; i < pokemonsList[pokemonIndex].type.length; i++) {
         let newType = document.createElement("span");
         newType.textContent = pokemonsList[pokemonIndex].type[i];
+        newType.classList.add("type")
+        switch (pokemonsList[pokemonIndex].type[i]) {
+            case ("Normal"):
+                newType.style.boxShadow = "0 0 0.8rem #A8A77A"
+                newType.style.backgroundColor = "#A8A77ACC"
+                break
+            case ("Fire"):
+                newType.style.boxShadow = "0 0 0.8rem #EE8130"
+                newType.style.backgroundColor = "#EE8130CC"
+                break
+            case ("Water"):
+                newType.style.boxShadow = "0 0 0.8rem #6390F0"
+                newType.style.backgroundColor = "#6390F0CC"
+                break
+            case ("Electric"):
+                newType.style.boxShadow = "0 0 0.8rem #F7D02C"
+                newType.style.backgroundColor = "#F7D02CCC"
+                break
+            case ("Grass"):
+                newType.style.boxShadow = "0 0 0.8rem #7AC74C"
+                newType.style.backgroundColor = "#7AC74CCC"
+                break
+            case ("Ice"):
+                newType.style.boxShadow = "0 0 0.8rem #96D9D6"
+                newType.style.backgroundColor = "#96D9D6CC"
+                break
+            case ("Fighting"):
+                newType.style.boxShadow = "0 0 0.8rem #C22E28"
+                newType.style.backgroundColor = "#C22E28CC"
+                break
+            case ("Poison"):
+                newType.style.boxShadow = "0 0 0.8rem #A33EA1"
+                newType.style.backgroundColor = "#A33EA1CC"
+                break
+            case ("Ground"):
+                newType.style.boxShadow = "0 0 0.8rem #E2BF65"
+                newType.style.backgroundColor = "#E2BF65CC"
+                break
+            case ("Flying"):
+                newType.style.boxShadow = "0 0 0.8rem #A98FF3"
+                newType.style.backgroundColor = "#A98FF3CC"
+                break
+            case ("Psychic"):
+                newType.style.boxShadow = "0 0 0.8rem #F95587"
+                newType.style.backgroundColor = "#F95587CC"
+                break
+            case ("Bug"):
+                newType.style.boxShadow = "0 0 0.8rem #A6B91A"
+                newType.style.backgroundColor = "#A6B91ACC"
+                break
+            case ("Rock"):
+                newType.style.boxShadow = "0 0 0.8rem #B6A136"
+                newType.style.backgroundColor = "#B6A136CC"
+                break
+            case ("Ghost"):
+                newType.style.boxShadow = "0 0 0.8rem #735797"
+                newType.style.backgroundColor = "#735797CC"
+                break
+            case ("Dragon"):
+                newType.style.boxShadow = "0 0 0.8rem #6F35FC"
+                newType.style.backgroundColor = "#6F35FCCC"
+                break
+            case ("Dark"):
+                newType.style.boxShadow = "0 0 0.8rem #705746"
+                newType.style.backgroundColor = "#705746CC"
+                break
+            case ("Steel"):
+                newType.style.boxShadow = "0 0 0.8rem #B7B7CE"
+                newType.style.backgroundColor = "#B7B7CECC"
+                break
+            case ("Fairy"):
+                newType.style.boxShadow = "0 0 0.8rem #D685AD"
+                newType.style.backgroundColor = "#D685ADCC"
+                break
+            default:
+                newType.style.boxShadow = "0 0 0.8rem #ffffff"
+                newType.style.backgroundColor = "#ffffffCC"
+
+        }
         pokemonTypes.appendChild(newType);
     }
 
