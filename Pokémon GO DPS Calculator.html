@@ -13,16 +13,16 @@
 <body>
     <div id="loading_container" class="invisible">
         <img src="src/assets/pokeball.png" alt="" id="spinning_pokeball">
-        <span id="loading_message">Chargement...</span>
+        <span id="loading_message">Loading...</span>
     </div>
 
-    <h1>Calculateur de DPS</h1>
-    <h2>pour Pokémon GO</h2>
+    <h1>Pokemon GO</h1>
+    <h2>DPS calculator</h2>
     <div id="bloc">
         <div id="inputs">
             <div id="top_inputs">
                 <div id="pokemon_selection_space">
-                    <label for="pokemon_selection">Sélectionnez votre Pokémon :</label>
+                    <label for="pokemon_selection">Select a Pokemon :</label>
                     <select id="pokemon_selection">
 
                     </select>
@@ -33,13 +33,13 @@
                 </div>
             </div>
             <div id="intermediate_inputs">
-                <label for="shadow_selection"><img src="src/assets/obscur.png" id="shadow_image"></label><label for="shadow_selection"><span id="shadow_text">Obscur</span></label>
+                <label for="shadow_selection"><img src="src/assets/obscur.png" id="shadow_image"></label><label for="shadow_selection"><span id="shadow_text">Shadow</span></label>
                 <input type="checkbox" id="shadow_selection">
             </div>
             <div id="bottom_inputs">
                 <div id="level_selection_space" class="selection_space">
-                    <label for="level_selection">Niveau du Pokémon</label>
-                    <span>*Niveau 30 conseillé</span>
+                    <label for="level_selection">Level</label>
+                    <span>*Level 30 recommanded</span>
                     <div>
                         <input type="range" id="level_selection" class="range" min="1" max="50" value="30" step="0.5"
                             oninput="document.getElementById('level').value=value">
@@ -48,7 +48,7 @@
                     </div>
                 </div>
                 <div id="attackiv_selection_space" class="selection_space">
-                    <label for="attackiv_selection">IV d'attaque du Pokémon</label>
+                    <label for="attackiv_selection">Attack IV</label>
                     <div>
                         <input type="range" id="attackiv_selection" class="range" min="0" max="15" value="15"
                             oninput="document.getElementById('attackiv').value=value">
@@ -57,26 +57,26 @@
                     </div>
                 </div>
                 <div id="weather_selection_space" class="selection_space">
-                    <label for="weather_selection">Météo</label>
+                    <label for="weather_selection">Weather</label>
                     <select id="weather_selection">
 
                     </select>
                 </div>
-                <button id="calc_button">Calculer</button>
+                <button id="calc_button">Calculate</button>
             </div>
         </div>
         <hr>
         <div id="results">
             <div id="time_result_container">
-                <span id="time_result_title">Temps estimé avant de tomber KO : </span><span id="time_result">0s</span>
+                <span id="time_result_title">Estimated time before getting KO : </span><span id="time_result">0s</span>
             </div>
             <table>
                 <thead>
                     <tr>
-                        <th>Attaque immédiate</th>
-                        <th>Attaque chargée</th>
-                        <th>DPS du cycle</th>
-                        <th>DPS en tombant KO</th>
+                        <th>Fast move</th>
+                        <th>Charged move</th>
+                        <th>Cycle DPS</th>
+                        <th>DPS when fainting</th>
                         <th>TDO</th>
                     </tr>
                 </thead>
@@ -89,11 +89,11 @@
         </div>
     </div>
     <section id="comment_section">
-        <p>DPS calculé selon les critères suivantes :
+        <p>DPS calculated according to the following criterias :
         <ul>
-            <li>la cible possède une statistique de base de 200 en défense.</li>
-            <li>le niveau de la cible est égal au niveau du Pokémon attaquant.</li>
-            <li>l'IV "défense" de la cible est égal à l'IV "attaque" du Pokémon attaquant.</li>
+            <li>the target base defense is 200.</li>
+            <li>the target level is equal to the selected pokemon level.</li>
+            <li>the target defense IV is equal to the selected pokemon attack IV.</li>
         </ul>
         </p>
 
