@@ -119,15 +119,15 @@ async function initStart() {
 
     loadingScreen.classList.remove("invisible");
 
-    loadingMessage.textContent = "Chargement des attaques immédiates...";
+    loadingMessage.textContent = "Loading fast moves...";
     await initFastMovesList();
-    loadingMessage.textContent = "Chargement des attaques chargées...";
+    loadingMessage.textContent = "Loading charged moves...";
     await initChargedMovesList();
 
-    loadingMessage.textContent = "Initialisation de la liste des Pokémons...";
+    loadingMessage.textContent = "Initialize the Pokemons list...";
     await initPokemonsList();
 
-    loadingMessage.textContent = "Finalisation...";
+    loadingMessage.textContent = "Finalization...";
     await initCpMultipliersList();
 
     insertPokemonsList();
@@ -162,7 +162,6 @@ async function initPokemonsList() {
     await addStatsToPokemonsList()
     await addMovesToPokemonsList()
     await addMovesCaracsToPokemonsList()
-    await addEliteTagsToPokemonsList()
 }
 
 /* Ajoute les stats à pokemonsList */
@@ -257,28 +256,6 @@ async function addMovesCaracsToPokemonsList() {
     }
 
 }
-
-/* Ajoute "elite" au nom des attaques élites de pokemonsList */
-async function addEliteTagsToPokemonsList() {
-    // pokemonsList.forEach(firstEl => {
-    //     firstEl.elite_fast_moves.forEach(secEl => {
-    //         secEl.name = `${secEl.name} (elite)`
-    //     })
-    //     firstEl.elite_charged_moves.forEach(thirdEl => {
-    //         thirdEl.name = `${thirdEl.name} (elite)`
-    //     })
-    // })
-
-    // for (let i = 0; i < pokemonsList.length; i++) {
-    //     for (let j = 0; j < pokemonsList[i].elite_fast_moves.length; j++) {
-    //         pokemonsList[i].elite_fast_moves[j].name = `${pokemonsList[i].elite_fast_moves[j].name} (elite)`
-    //     }
-    //     for (let j = 0; j < pokemonsList[i].elite_charged_moves.length; j++) {
-    //         pokemonsList[i].elite_charged_moves[j].name = `${pokemonsList[i].elite_charged_moves[j].name} (elite)`
-    //     }
-    // }
-}
-
 
 /* Défini cpMultipliersList */
 async function initCpMultipliersList() {
@@ -453,7 +430,7 @@ function setTypes(pokemonIndex) {
 function launchCalc() {
 
     loadingScreen.classList.remove("invisible");
-    loadingMessage.textContent = "Calcul en cours...";
+    loadingMessage.textContent = "Calculating...";
     try {
         storeInformations();
         multipliersCalc();
@@ -464,8 +441,8 @@ function launchCalc() {
         dpsCalc();
         writeResults()
     } catch (err) {
-        loadingMessage.textContent = "Une erreur a été rencontrée.";
-        window.alert(`⚠️ Attention ! ⚠️ \n \n Le Pokémon séletionné a rencontré une erreur. Merci de prévenir le créateur de l'application en lui indiquant le Pokémon qui pose problème. \n \n ❌ ${currentPokemon.pokemon_name} (${currentPokemon.form})`);
+        loadingMessage.textContent = "An error has occured.";
+        window.alert(`⚠️ Warning ! ⚠️ \n \nThe selected Pokemon encountered and error. Maybe Niantic hasn't released it yet or its data is not fixed. \n \n ❌ ${currentPokemon.pokemon_name} (${currentPokemon.form})`);
         loadingScreen.classList.add("invisible");
         console.log(err);
     }
@@ -489,13 +466,13 @@ function storeInformations() {
     targetAtkIv = 15;
     targetDefIv = 15;
     targetFastMove = {
-        name: "Attaque immédiate",
+        name: "Fast move",
         power: 5,
         time: 2,
         energy: 8
     }
     targetChargedMove = {
-        name: "Attaque chargée",
+        name: "Charged move",
         power: 80,
         time: 2.5,
         energy: 50
